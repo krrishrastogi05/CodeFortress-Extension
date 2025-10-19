@@ -61,7 +61,11 @@
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = htmlContent;
 
+<<<<<<< HEAD
             // Remove all elements with MJX_Assistive_MathML class
+=======
+            // remove all element with MJX_Assistive_MathML class
+>>>>>>> 8473faefc1347126bd33f1b4827eb000e5ea209d
             tempDiv.querySelectorAll('.MJX_Assistive_MathML').forEach(el => el.remove());
 
             // Fix image URLs - Convert relative URLs to absolute Codeforces URLs
@@ -119,7 +123,11 @@
                     `;
                 }).join('');
             } else {
+<<<<<<< HEAD
                 samplesHTML += tempDiv.querySelector(".sample-tests")?.innerHTML || "No examples found.";
+=======
+                samplesHTML += tempDiv.querySelector(".sample-tests")?.innerHTML || "No samples found.";
+>>>>>>> 8473faefc1347126bd33f1b4827eb000e5ea209d
             }
 
             problemViewer.innerHTML = `
@@ -144,7 +152,10 @@
             addCollapsibleListeners();
             addCopyButtonListeners();
             addImageErrorHandling();
+<<<<<<< HEAD
             renderMath();
+=======
+>>>>>>> 8473faefc1347126bd33f1b4827eb000e5ea209d
         } catch (error) {
             console.error("Failed to render problem:", error);
             problemViewer.innerHTML = `<p>Error rendering problem. Check the Webview Developer Tools console for details.</p><pre>${error.stack}</pre>`;
@@ -172,7 +183,16 @@
                 // Add loading and error handling attributes
                 img.setAttribute('loading', 'lazy');
                 img.setAttribute('alt', 'Problem image');
+<<<<<<< HEAD
                 img.classList.add('problem-image');
+=======
+
+                // Add inline styles for better display
+                img.style.maxWidth = '100%';
+                img.style.height = 'auto';
+                img.style.display = 'block';
+                img.style.margin = '10px auto';
+>>>>>>> 8473faefc1347126bd33f1b4827eb000e5ea209d
             }
         });
     }
@@ -183,6 +203,7 @@
     function addImageErrorHandling() {
         const images = problemViewer.querySelectorAll('img');
         images.forEach(img => {
+<<<<<<< HEAD
             // Remove old error listener if exists
             img.removeEventListener('error', handleImageError);
             // Add new error listener
@@ -215,6 +236,34 @@
         img.parentNode.replaceChild(placeholder, img);
     }
 
+=======
+            img.addEventListener('error', function () {
+                // Create a placeholder div when image fails to load
+                const placeholder = document.createElement('div');
+                placeholder.style.cssText = `
+                    background: #f0f0f0;
+                    border: 2px dashed #ccc;
+                    padding: 20px;
+                    text-align: center;
+                    color: #666;
+                    border-radius: 8px;
+                    margin: 10px auto;
+                    max-width: 100%;
+                `;
+                placeholder.innerHTML = `
+                    <p>⚠️ Image failed to load</p>
+                    <p style="font-size: 12px; margin-top: 8px;">
+                        <a href="${this.src}" target="_blank" style="color: #0078d4;">
+                            View image in browser
+                        </a>
+                    </p>
+                `;
+                this.parentNode.replaceChild(placeholder, this);
+            });
+        });
+    }
+
+>>>>>>> 8473faefc1347126bd33f1b4827eb000e5ea209d
     function addCollapsibleListeners() {
         problemViewer.querySelectorAll('.collapsible .title').forEach(title => {
             const newTitle = title.cloneNode(true);
@@ -269,21 +318,44 @@
     }
 
     function renderMath() {
+<<<<<<< HEAD
         if (!window.MathJax || !window.MathJax.typesetPromise) {
             console.log("MathJax not available");
             return;
         }
+=======
+        // Ensure MathJax is loaded and ready
+        if (!window.MathJax || !window.MathJax.typesetPromise) return;
+>>>>>>> 8473faefc1347126bd33f1b4827eb000e5ea209d
 
         const container = document.getElementById('problem-viewer');
         if (!container) return;
 
+<<<<<<< HEAD
         try {
             console.log("Rendering MathJax...");
 
+=======
+        // Prevent unnecessary re-rendering
+        const alreadyRendered = container.querySelector('.MathJax');
+        if (alreadyRendered) {
+            console.log("MathJax already rendered – skipping re-typeset");
+            return;
+        }
+
+        try {
+            console.log("Rendering MathJax...");
+
+            // Clear previous renders (if any) in the container
+>>>>>>> 8473faefc1347126bd33f1b4827eb000e5ea209d
             if (window.MathJax.typesetClear) {
                 window.MathJax.typesetClear([container]);
             }
 
+<<<<<<< HEAD
+=======
+            // Render only within the container
+>>>>>>> 8473faefc1347126bd33f1b4827eb000e5ea209d
             window.MathJax.typesetPromise([container])
                 .then(() => console.log("MathJax render complete"))
                 .catch(err => console.error("MathJax render failed:", err));
