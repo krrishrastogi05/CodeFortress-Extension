@@ -1,0 +1,118 @@
+{
+  "name": "codefortress-extension",
+  "displayName": "CodeFortress Simplified",
+  "description": "A small interview-friendly VS Code extension for running competitive programming test cases.",
+  "version": "1.0.0",
+  "publisher": "student-demo",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:codefortress.runTestCases",
+    "onCommand:codefortress.openJudge",
+    "onCommand:codefortress.createLocalProblem",
+    "onView:codefortress.judgeView"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codefortress-container",
+          "title": "CodeFortress",
+          "icon": "static/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "codefortress-container": [
+        {
+          "type": "webview",
+          "id": "codefortress.judgeView",
+          "name": "Judge"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "codefortress.runTestCases",
+        "title": "CodeFortress: Run Test Cases"
+      },
+      {
+        "command": "codefortress.openJudge",
+        "title": "CodeFortress: Open Judge Panel"
+      },
+      {
+        "command": "codefortress.createLocalProblem",
+        "title": "CodeFortress: Create Local Problem"
+      }
+    ],
+    "keybindings": [
+      {
+        "key": "ctrl+alt+b",
+        "command": "codefortress.runTestCases"
+      }
+    ],
+    "configuration": {
+      "title": "CodeFortress Simplified",
+      "properties": {
+        "codefortress.timeoutMs": {
+          "type": "number",
+          "default": 3000,
+          "description": "Maximum time allowed for one test case in milliseconds."
+        },
+        "codefortress.cppCompiler": {
+          "type": "string",
+          "default": "g++",
+          "description": "Command used to compile C++ files."
+        },
+        "codefortress.pythonCommand": {
+          "type": "string",
+          "default": "python",
+          "description": "Command used to run Python files."
+        },
+        "codefortress.javaCompiler": {
+          "type": "string",
+          "default": "javac",
+          "description": "Command used to compile Java files."
+        },
+        "codefortress.javaCommand": {
+          "type": "string",
+          "default": "java",
+          "description": "Command used to run Java class files."
+        },
+        "codefortress.nodeCommand": {
+          "type": "string",
+          "default": "node",
+          "description": "Command used to run JavaScript files."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "webpack": "webpack --mode development && webpack --mode development --config webpack.frontend.config.js",
+    "package": "webpack --mode production && webpack --mode production --config webpack.frontend.config.js",
+    "watch": "webpack --mode development --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@types/vscode": "^1.85.0",
+    "@vscode/codicons": "^0.0.35",
+    "copy-webpack-plugin": "^11.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
