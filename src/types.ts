@@ -16,7 +16,28 @@ export type TestCase = {
 export type Problem = {
   name: string;
   srcPath: string;
+  url?: string;
+  group?: string;
+  timeLimit?: number;
+  memoryLimit?: number;
+  problemStatement?: string;
   tests: TestCase[];
+};
+
+export type CompanionTest = {
+  input: string;
+  output: string;
+};
+
+export type CompanionProblem = {
+  name: string;
+  url: string;
+  group?: string;
+  timeLimit?: number;
+  memoryLimit?: number;
+  interactive?: boolean;
+  tests: CompanionTest[];
+  problemStatement?: string;
 };
 
 export type RunStatus = 'passed' | 'failed' | 'compile-error' | 'runtime-error' | 'timeout';

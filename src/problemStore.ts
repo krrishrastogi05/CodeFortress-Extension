@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Problem, TestCase } from './types';
+import { CompanionProblem, Problem, TestCase } from './types';
 
 function storageFolder(srcPath: string): string {
   return path.join(path.dirname(srcPath), '.codefortress');
@@ -15,6 +15,23 @@ export function createBlankProblem(srcPath: string): Problem {
     name: path.basename(srcPath),
     srcPath,
     tests: [createBlankTestCase()]
+  };
+}
+
+export function problemFromCompanion(srcPath: string, companion: CompanionProblem): Problem {
+  return {
+    name: companion.name,
+    srcPath,
+    url: companion.url,
+    group: companion.group,
+    timeLimit: companion.timeLimit,
+    memoryLimit: companion.memoryLimit,
+    problemStatement: companion.problemStatement,
+    tests: companion.tests.map((test, index) => ({
+      id: Date.now() + index,
+      input: test.input,
+      expectedOutput: test.output
+    }))
   };
 }
 

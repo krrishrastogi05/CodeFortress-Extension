@@ -12,6 +12,7 @@
     "Other"
   ],
   "activationEvents": [
+    "onStartupFinished",
     "onCommand:codefortress.runTestCases",
     "onCommand:codefortress.openJudge",
     "onCommand:codefortress.createLocalProblem",
@@ -89,6 +90,11 @@
           "type": "string",
           "default": "node",
           "description": "Command used to run JavaScript files."
+        },
+        "codefortress.companionPort": {
+          "type": "number",
+          "default": 10045,
+          "description": "Port used by the Competitive Companion import server."
         }
       }
     }

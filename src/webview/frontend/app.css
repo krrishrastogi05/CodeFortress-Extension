@@ -92,16 +92,99 @@ h2 {
 
 .summary,
 .actions,
-.footer {
+.footer,
+.tabs,
+.statement-meta {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.tabs {
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.tabs button {
+  min-height: 28px;
+  border-color: transparent;
+  background: transparent;
+}
+
+.tabs button.selected {
+  background: var(--panel-soft);
+  border-color: var(--border);
 }
 
 .cases {
   padding: 14px;
   display: grid;
   gap: 12px;
+}
+
+.statement {
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+  max-width: 980px;
+  width: 100%;
+}
+
+.statement-meta {
+  flex-wrap: wrap;
+  color: var(--muted);
+}
+
+.statement-meta a {
+  color: var(--accent);
+  text-decoration: none;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.statement-html {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 18px;
+  overflow: auto;
+}
+
+.statement-html h1,
+.statement-html h2,
+.statement-html h3,
+.statement-html .title {
+  color: var(--text);
+}
+
+.statement-html p,
+.statement-html li,
+.statement-html td,
+.statement-html th,
+.statement-html div {
+  max-width: 100%;
+}
+
+.statement-html img {
+  max-width: 100%;
+  height: auto;
+}
+
+.statement-html pre,
+.statement-html .input,
+.statement-html .output {
+  overflow-x: auto;
+}
+
+.statement-empty {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  color: var(--muted);
+  background: var(--panel);
 }
 
 .case-card {
@@ -228,6 +311,11 @@ pre {
 @media (max-width: 520px) {
   .topbar,
   .case-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .summary {
     align-items: stretch;
     flex-direction: column;
   }

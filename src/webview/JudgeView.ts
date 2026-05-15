@@ -93,10 +93,18 @@ export class JudgeViewProvider implements vscode.WebviewViewProvider {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; font-src ${webview.cspSource}; script-src 'nonce-${nonce}';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; font-src ${webview.cspSource}; img-src ${webview.cspSource} https: data:; script-src 'nonce-${nonce}' https://cdn.jsdelivr.net;" />
   <link rel="stylesheet" href="${codiconsUri}" />
   <link rel="stylesheet" href="${styleUri}" />
   <title>CodeFortress</title>
+  <script nonce="${nonce}">
+    window.MathJax = {
+      tex: { inlineMath: [['$$$', '$$$'], ['\\\\(', '\\\\)']], displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']] },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] },
+      startup: { typeset: false }
+    };
+  </script>
+  <script nonce="${nonce}" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
   <div id="root"></div>

@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { startCompanionServer } from './companionServer';
 import { CommandController } from './commands';
 import { JudgeViewProvider } from './webview/JudgeView';
 
@@ -14,6 +15,8 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   judgeView.setController(commands);
+  const companionServer = startCompanionServer(judgeView);
+  context.subscriptions.push({ dispose: () => companionServer.close() });
 
   const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
   status.text = '$(run-all) Run Test Cases';

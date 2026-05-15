@@ -16,6 +16,7 @@ function App() {
   const [results, setResults] = useState<Record<number, RunResult>>(savedState?.results ?? {});
   const [runningIds, setRunningIds] = useState<Set<number>>(new Set());
   const [runningAll, setRunningAll] = useState(false);
+  const [activeTab, setActiveTab] = useState<'statement' | 'tests'>('statement');
   const saveTimer = useRef<NodeJS.Timeout | undefined>();
 
   useEffect(() => {
@@ -27,9 +28,11 @@ function App() {
           setProblem(message.problem);
           setResults({});
           setRunningIds(new Set());
+          setActiveTab(message.problem?.problemStatement ? 'statement' : 'tests');
           break;
         case 'case-running':
           setRunningIds((current) => new Set(current).add(message.id));
+          setActiveTab('tests');
           break;
         case 'case-result':
           setRunningIds((current) => {
@@ -121,6 +124,14 @@ function App() {
         </div>
         <div className="summary">
           <span>{passCount}/{problem.tests.length} passed</span>
+          <div className="tabs">
+            <button className={activeTab === 'statement' ? 'selected' : ''} onClick={() => setActiveTab('statement')}>
+              Statement
+            </button>
+            <button className={activeTab === 'tests' ? 'selected' : ''} onClick={() => setActiveTab('tests')}>
+              Tests
+            </button>
+          </div>
           <button className="primary" disabled={runningAll || runningIds.size > 0} onClick={runAll}>
             <span className="codicon codicon-run-all" />
             {runningAll ? 'Running' : 'Run All'}
@@ -128,20 +139,24 @@ function App() {
         </div>
       </header>
 
-      <section className="cases">
-        {problem.tests.map((test, index) => (
-          <CaseCard
-            key={test.id}
-            index={index}
-            test={test}
-            result={results[test.id]}
-            isRunning={runningIds.has(test.id)}
-            onChange={updateTest}
-            onRun={runOne}
-            onDelete={deleteCase}
-          />
-        ))}
-      </section>
+      {activeTab === 'statement' ? (
+        <ProblemStatement problem={problem} />
+      ) : (
+        <section className="cases">
+          {problem.tests.map((test, index) => (
+            <CaseCard
+              key={test.id}
+              index={index}
+              test={test}
+              result={results[test.id]}
+              isRunning={runningIds.has(test.id)}
+              onChange={updateTest}
+              onRun={runOne}
+              onDelete={deleteCase}
+            />
+          ))}
+        </section>
+      )}
 
       <footer className="footer">
         <button onClick={addCase}>
@@ -151,6 +166,59 @@ function App() {
       </footer>
     </main>
   );
+}
+
+function ProblemStatement({ problem }: { problem: Problem }) {
+  const statementRef = useRef<HTMLDivElement>(null);
+  const html = useMemo(() => sanitizeStatement(problem.problemStatement ?? ''), [problem.problemStatement]);
+
+  useEffect(() => {
+    const element = statementRef.current;
+    if (!element) {
+      return;
+    }
+
+    element.querySelectorAll('img').forEach((image) => {
+      image.setAttribute('loading', 'lazy');
+    });
+
+    const mathJax = (window as unknown as { MathJax?: { typesetClear?: (elements: HTMLElement[]) => void; typesetPromise?: (elements: HTMLElement[]) => Promise<void> } }).MathJax;
+    mathJax?.typesetClear?.([element]);
+    mathJax?.typesetPromise?.([element]).catch(console.error);
+  }, [html]);
+
+  return (
+    <section className="statement">
+      <div className="statement-meta">
+        {problem.url && (
+          <a href={problem.url}>
+            <span className="codicon codicon-link-external" />
+            Source
+          </a>
+        )}
+        {problem.timeLimit !== undefined && <span>Time: {problem.timeLimit}ms</span>}
+        {problem.memoryLimit !== undefined && <span>Memory: {problem.memoryLimit}MB</span>}
+      </div>
+
+      {html ? (
+        <div ref={statementRef} className="statement-html" dangerouslySetInnerHTML={{ __html: html }} />
+      ) : (
+        <div className="statement-empty">
+          <h2>No imported statement yet</h2>
+          <p>Use Competitive Companion on a Codeforces problem page to import the statement and sample tests.</p>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function sanitizeStatement(html: string): string {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<link\b[^>]*\brel=["']?stylesheet["']?[^>]*>/gi, '')
+    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*')/gi, '')
+    .replace(/<span\b[^>]*class="[^"]*MathJax_Preview[^"]*"[^>]*>[\s\S]*?<\/span>/gi, '')
+    .replace(/<div\b[^>]*class="[^"]*input-output-copier[^"]*"[^>]*>[\s\S]*?<\/div>/gi, '');
 }
 
 function CaseCard(props: {
